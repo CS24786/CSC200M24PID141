@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Klondike Solitaire</title>
+  <link rel="stylesheet" href="Game1.css" />
+</head>
+<body>
+
+  <!-- Start Screen -->
+  <div id="startScreen" class="start-screen">
+    <div class="intro-content">
+      <h1>Klondike Solitaire</h1>
+      <p>Get ready to play!</p>
+      <button id="startBtn">Start Game</button>
+    </div>
+  </div>
+
+  <header>
+    <h1>Klondike Solitaire</h1>
+    <div class="controls">
+      <button id="newGame">New Game</button>
+      <button id="undoBtn">Undo</button>
+      <button id="redoBtn">Redo</button>
+      <button id="hintBtn" title="Show a hint">Hint</button>
+    </div>
+    <div class="hud">
+      <div id="scoreEl">Score: 0</div>
+      <div id="timeEl">Time: 00:00</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="top-row">
+      <div class="stock-area">
+        <div id="stock" class="pile stock"></div>
+        <div id="waste" class="pile waste"></div>
+      </div>
+
+      <div class="foundations" id="foundationsWrapper">
+        <div class="foundation" data-index="0"></div>
+        <div class="foundation" data-index="1"></div>
+        <div class="foundation" data-index="2"></div>
+        <div class="foundation" data-index="3"></div>
+      </div>
+    </section>
+
+    <section id="tableau" class="tableau"></section>
+  </main>
+
+  <!-- Win modal -->
+  <div id="winModal" class="start-screen" style="display:none;">
+    <div class="intro-content">
+      <h1>🎉 You Win!</h1>
+      <p id="winStats">Time: 00:00 | Score: 0</p>
+      <button id="winOk">OK</button>
+    </div>
+  </div>
+
+  <script src="Game0.js"></script>
+</body>
+</html>

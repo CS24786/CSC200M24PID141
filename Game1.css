@@ -1,0 +1,174 @@
+:root{
+  --bg1: #07241b;
+  --bg2: #053827;
+  --card-w: 84px;
+  --card-h: 120px;
+  --gap: 14px;
+  --accent: #ffd27f;
+  --tableau-offset: 28px;
+  --waste-overlap: 16px;
+  --ui-radius: 10px;
+}
+
+*{ box-sizing: border-box; font-family: "Inter", Arial, sans-serif; }
+body{
+  margin:0;
+  min-height:100vh;
+  background: linear-gradient(180deg,#04251b 0%, #073a2e 60%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:18px;
+  color:#fff;
+}
+
+/* Header */
+header{
+  width:100%;
+  max-width:1200px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+h1{ font-size:20px; color:var(--accent); margin:0; letter-spacing:1px; }
+.controls{ display:flex; gap:10px; align-items:center; }
+.controls button{
+  padding:8px 12px; border-radius:8px; border:none; cursor:pointer;
+  background: linear-gradient(180deg,#164f3a, #0f3b2d);
+  color:#fff; font-weight:600; box-shadow:0 6px 14px rgba(0,0,0,0.45);
+}
+.controls button:hover{ transform:translateY(-3px); }
+
+/* HUD */
+.hud{ display:flex; gap:12px; color:var(--accent); font-weight:700; }
+
+/* Main board */
+main{ width:100%; max-width:1200px; position:relative; }
+
+/* Top row (stock/waste and foundations) */
+.top-row{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; }
+
+/* Stock + Waste */
+.stock-area{ display:flex; gap:18px; align-items:flex-start; }
+.pile{ width:var(--card-w); height:var(--card-h); border-radius:var(--ui-radius);
+  background: linear-gradient(180deg,#0f3b2d,#083323); box-shadow:0 8px 20px rgba(0,0,0,0.55);
+  position:relative; overflow:visible; display:flex; align-items:center; justify-content:center;
+}
+.pile.empty{ opacity:0.35; border:1px dashed rgba(255,255,255,0.06); }
+
+/* Waste: for 3 cards drawn */
+.pile.waste{
+  width: calc(var(--card-w) + 2 * var(--waste-overlap));
+  height: var(--card-h);
+  position:relative;
+}
+
+/* Each card placed absolutely within the waste pile — left-to-right overlap */
+.pile.waste .card{
+  position:absolute;
+  top: 0;
+  width:var(--card-w);
+  height:var(--card-h);
+  border-radius:8px;
+  box-shadow:0 10px 22px rgba(0,0,0,0.5);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.pile.waste .card[data-waste-index="0"]{ left: 0px; z-index:1; transform: scale(.96); opacity:.75; }
+.pile.waste .card[data-waste-index="1"]{ left: var(--waste-overlap); z-index:2; transform: scale(.98); opacity:.9; }
+.pile.waste .card[data-waste-index="2"]{ left: calc(2 * var(--waste-overlap)); z-index:3; transform: scale(1); opacity:1; }
+
+/* Hover for waste to fan slightly */
+.pile.waste:hover .card[data-waste-index="0"]{ transform: translateY(-6px) scale(.98); }
+.pile.waste:hover .card[data-waste-index="1"]{ transform: translateY(-8px) scale(1.00); }
+.pile.waste:hover .card[data-waste-index="2"]{ transform: translateY(-10px) scale(1.03); }
+.pile.waste .card:hover{ transform: translateY(-14px) scale(1.06); z-index:6; }
+
+/* Foundations: placed above tableau visually */
+#foundationsWrapper{
+  display:flex; gap:12px;
+}
+.foundation{
+  width:var(--card-w); height:var(--card-h); border-radius:8px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), 0 8px 18px rgba(0,0,0,0.45);
+  display:flex; align-items:center; justify-content:center;
+  position:relative; z-index:40;
+}
+
+/* Tableau layout */
+.tableau{
+  display:grid;
+  grid-template-columns: repeat(7, var(--card-w));
+  gap: var(--gap);
+  justify-content:center;
+  padding: 18px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.03));
+  border-radius:12px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5) inset;
+}
+
+/* Each column area */
+.column{
+  width:var(--card-w);
+  position:relative;
+  min-height: calc(var(--card-h) + 8 * var(--tableau-offset));
+}
+
+/* Tableau cards */
+.column .card{
+  position:absolute;
+  width:100%;
+  height:var(--card-h);
+  border-radius:8px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.45);
+  transition: transform .16s ease;
+}
+
+/* Card base styles */
+.card{
+  border: 1px solid rgba(0,0,0,0.35);
+  background-color:#fff;
+  cursor:pointer;
+  overflow:hidden;
+  border-radius:8px;
+}
+.card img{ width:100%; height:100%; object-fit:contain; pointer-events:none; }
+
+/* Back side */
+.card.back{ background: linear-gradient(180deg,#235a47,#144031); display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px; }
+.card.back::after{ content:"★"; opacity:0.95; }
+
+/* Selected and hint */
+.card.selected{ outline: 3px solid var(--accent); transform: translateY(-8px); z-index:120; }
+.card.hint{ box-shadow: 0 0 30px 6px rgba(255,215,0,0.9); transform: translateY(-8px) scale(1.04); z-index:200; }
+.hint-target{ box-shadow: 0 0 28px 8px rgba(60,180,75,0.85); border-radius:12px; z-index:170; }
+
+/* Drag ghost */
+.drag-ghost{ position:fixed; pointer-events:none; width:var(--card-w); height:var(--card-h); transform:translate(-50%,-50%); z-index:5000; border-radius:8px; box-shadow: 0 18px 40px rgba(0,0,0,0.6); }
+
+/* Start/Win screen */
+.start-screen{
+  position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:10000;
+  background: radial-gradient(circle at center, rgba(0,0,0,0.6), rgba(0,0,0,0.8));
+  color:#fff; text-align:center;
+}
+.start-screen .intro-content{ background: linear-gradient(180deg,#063826,#0c4331); padding:30px; border-radius:12px; box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
+.start-screen button{ padding:10px 18px; border-radius:8px; border:none; background:var(--accent); color:#111; font-weight:700; cursor:pointer; }
+
+/* Confetti animation */
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(600px) rotate(360deg); }
+}
+.confetti {
+  position: fixed; width: 10px; height: 10px; background: #ffd27f;
+  top: -10px; left: 50%; z-index:10000; opacity:0.9;
+  animation: confetti-fall linear 2s forwards;
+}
+
+/* small responsive tweaks */
+@media (max-width:900px){
+  :root{ --card-w:68px; --card-h:96px; --tableau-offset:20px; }
+  .controls{ flex-wrap:wrap; }
+}
